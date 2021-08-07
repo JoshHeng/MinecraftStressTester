@@ -1,0 +1,19 @@
+{
+  "name": "minecraftstresstester",
+  "version": "1.0.0",
+  "description": "MinecraftStressTester",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JoshHeng/MinecraftStressTester.git"
+  },
+  "author": "Josh Heng",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/JoshHeng/MinecraftStressTester/issues"
+  },
+  "homepage": "https://github.com/JoshHeng/MinecraftStressTester#readme"
+}
