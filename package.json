@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "description": "MinecraftStressTester",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
@@ -15,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/JoshHeng/MinecraftStressTester/issues"
   },
-  "homepage": "https://github.com/JoshHeng/MinecraftStressTester#readme"
+  "homepage": "https://github.com/JoshHeng/MinecraftStressTester#readme",
+  "dependencies": {
+    "minecraft-protocol": "^1.25.0"
+  }
 }
