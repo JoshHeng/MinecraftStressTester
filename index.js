@@ -2,7 +2,7 @@ import mc from 'minecraft-protocol';
 
 const HOST = 'localhost';
 const PORT = 25565;
-const USERS = 2;
+const USERS = 100;
 
 /**
  * Sleep
@@ -16,39 +16,48 @@ async function sleep(duration) {
 /**
  * Connect a new Minecraft client to the server
  * @param {string} username - The username of the client
- * @returns {client} Client
+ * @returns {Promise} Promise that resolves with connected client
  */
 function connectClient(username) {
-	console.log(`[${username}] Connecting`);
+	return new Promise((res, rej) => {
+		console.log(`[${username}] Connecting`);
 
-	const client = mc.createClient({
-		host: HOST,
-		port: PORT,
-		username: username,
-		auth: 'mojang',
-		version: '1.17.1'
-	});
+		const client = mc.createClient({
+			host: HOST,
+			port: PORT,
+			username: username,
+			auth: 'mojang'
+		});
 
-	/**
-	 * Logged in
-	 */
-	client.on('success', () => {
-		console.log(`[${username}] Connected Successfully`);
-		client.write('chat', { message: `Hello, world!` });
-	});
+		/**
+		 * Logged in
+		 */
+		client.on('success', () => {
+			console.log(`[${username}] Connected Successfully`);
+			res(client);
+		});
 
-	/**
-	 * Error
-	 */
-	client.on('error', error => {
-		console.log(`[${username}] Error: ${error}`);
-	});
+		/**
+		 * Disconnected
+		 */
+		client.on('disconnect', packet => {
+			console.log(`[${username}] Disconnected: ${packet.reason}`);
+			if (packet.reason.translate === 'multiplayer.disconnect.server_full') rej('Server is full');
+		})
 
-	/**
-	 * End
-	 */
-	 client.on('end', error => {
-		console.log(`[${username}] End: ${error}`);
+		/**
+		 * Error
+		 */
+		client.on('error', error => {
+			console.log(`[${username}] Error: ${error}`);
+		});
+
+		/**
+		 * End
+		 */
+		client.on('end', error => {
+			console.log(`[${username}] End: ${error}`);
+		});
 	});
 }
 
@@ -60,8 +69,7 @@ async function connectAllClients() {
 	console.log('Connecting clients...');
 
 	for (let i = 1; i < USERS + 1; i++) {
-		connectClient(`Test ${i}`);
-		await sleep(1000);
+		await connectClient(`Stress Test ${i}`);
 	}
 
 	console.log('Clients connected!');
